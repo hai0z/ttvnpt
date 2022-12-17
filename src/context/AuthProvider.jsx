@@ -34,7 +34,7 @@ function AuthProvider({ children }) {
     }, []);
     return (
         <AuthContext.Provider value={{ auth, setAuth, loading, setLoading }}>
-            {children}
+            {!loading && children}
         </AuthContext.Provider>
     );
 }
