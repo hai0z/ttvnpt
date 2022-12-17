@@ -12,16 +12,16 @@ const Login = () => {
             email: "",
             password: "",
         },
-        onSubmit: async (values) => {
+        onSubmit: async ({ email, password }) => {
             try {
                 await firebaseAuth.signInWithEmailAndPassword(
                     firebaseAuth.getAuth(),
-                    values.email,
-                    values.password
+                    email,
+                    password
                 );
             } catch (err) {
                 console.log(err);
-                setErr("Wrong user name or password");
+                setErr("Wrong email or password");
             }
         },
         validationSchema: Yup.object({

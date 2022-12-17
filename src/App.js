@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import useAuthContext from "./hooks/useAuthContext";
 import Home from "./pages/Home";
 import SignUp from "./pages/SignUp";
+
 function App() {
     const { auth } = useAuthContext();
     return (
