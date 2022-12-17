@@ -9,6 +9,7 @@ function AuthProvider({ children }) {
         email: "",
     });
     const [loading, setLoading] = useState(true);
+
     useEffect(() => {
         const unsubscribe = firebaseAuth.onAuthStateChanged(
             firebaseAuth.getAuth(),
@@ -32,6 +33,7 @@ function AuthProvider({ children }) {
         );
         return () => unsubscribe;
     }, []);
+
     return (
         <AuthContext.Provider value={{ auth, setAuth, loading, setLoading }}>
             {!loading && children}

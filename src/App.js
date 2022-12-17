@@ -5,8 +5,7 @@ import useAuthContext from "./hooks/useAuthContext";
 import Home from "./pages/Home";
 import SignUp from "./pages/SignUp";
 function App() {
-    const { auth, loading } = useAuthContext();
-    if (loading) return <p>loading ...</p>;
+    const { auth } = useAuthContext();
     return (
         <BrowserRouter>
             <Routes>

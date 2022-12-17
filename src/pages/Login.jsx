@@ -1,24 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { firebaseAuth } from "../firebase";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const Login = () => {
     const [err, setErr] = useState("");
 
-    const [account, setAccount] = useState({
-        email: "",
-        password: "",
+    const formik = useFormik({
+        initialValues: {
+            email: "",
+            password: "",
+        },
+        onSubmit: async (values) => {
+            try {
+                await firebaseAuth.signInWithEmailAndPassword(
+                    firebaseAuth.getAuth(),
+                    values.email,
+                    values.password
+                );
+            } catch (err) {
+                console.log(err);
+                setErr("Wrong user name or password");
+            }
+        },
+        validationSchema: Yup.object({
+            email: Yup.string().email().required(),
+            password: Yup.string().required(),
+        }),
     });
-
-    const handleLogin = () => {
-        firebaseAuth
-            .signInWithEmailAndPassword(
-                firebaseAuth.getAuth(),
-                account.email,
-                account.password
-            )
-            .catch(() => setErr("Wrong user name or password"));
-    };
 
     useEffect(() => {
         const clearErr = setTimeout(() => {
@@ -39,7 +49,7 @@ const Login = () => {
                         />
                     </div>
                     <div className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
-                        <form>
+                        <form onSubmit={formik.handleSubmit}>
                             <div className="flex flex-row items-center justify-center lg:justify-start">
                                 <p className="text-lg mb-0 mr-4">
                                     Sign in with
@@ -111,14 +121,15 @@ const Login = () => {
                                     className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                                     id="exampleFormControlInput2"
                                     placeholder="Email address"
-                                    value={account.email}
-                                    onChange={(e) =>
-                                        setAccount({
-                                            ...account,
-                                            email: e.target.value,
-                                        })
-                                    }
+                                    value={formik.values.email}
+                                    name="email"
+                                    onChange={formik.handleChange}
                                 />
+                                {formik.errors.email && (
+                                    <p className="text-red-500">
+                                        {formik.errors.email}
+                                    </p>
+                                )}
                             </div>
 
                             <div className="mb-6">
@@ -127,14 +138,15 @@ const Login = () => {
                                     className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                                     id="exampleFormControlInput"
                                     placeholder="Password"
-                                    value={account.password}
-                                    onChange={(e) =>
-                                        setAccount({
-                                            ...account,
-                                            password: e.target.value,
-                                        })
-                                    }
+                                    name="password"
+                                    value={formik.values.password}
+                                    onChange={formik.handleChange}
                                 />
+                                {formik.errors.password && (
+                                    <p className="text-red-500">
+                                        {formik.errors.password}
+                                    </p>
+                                )}
                             </div>
                             {err && (
                                 <span className="text-red-500 -mt-2">
@@ -160,13 +172,11 @@ const Login = () => {
                                 </a>
                             </div>
                             <div className="text-center lg:text-left">
-                                <button
-                                    onClick={handleLogin}
-                                    type="button"
+                                <input
+                                    type="submit"
                                     className="inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-                                >
-                                    Login
-                                </button>
+                                    value="Login"
+                                />
                                 <p className="text-sm font-semibold mt-2 pt-1 mb-0">
                                     Don't have an account?
                                     <Link

@@ -17,27 +17,25 @@ const SignUp = () => {
             password: "",
             confirmPassword: "",
         },
-        onSubmit: ({ email, password }) => {
-            firebaseAuth
-                .createUserWithEmailAndPassword(
+        onSubmit: async ({ email, password }) => {
+            try {
+                await firebaseAuth.createUserWithEmailAndPassword(
                     firebaseAuth.getAuth(),
                     email,
                     password
-                )
-                .then(() => {
-                    setSignupSuccess({
-                        status: true,
-                        message: "Sign up successfully",
-                    });
-                    firebaseAuth.signOut(firebaseAuth.getAuth());
-                })
-                .catch((err) => {
-                    console.log(err);
-                    setSignupSuccess({
-                        status: false,
-                        message: "Email is already exist",
-                    });
+                );
+                await firebaseAuth.signOut(firebaseAuth.getAuth());
+                setSignupSuccess({
+                    status: true,
+                    message: "Sign up successfully",
                 });
+            } catch (err) {
+                console.log(err);
+                setSignupSuccess({
+                    status: false,
+                    message: "Email is already exist",
+                });
+            }
         },
         validationSchema: Yup.object({
             email: Yup.string().email("Email is not valid"),
