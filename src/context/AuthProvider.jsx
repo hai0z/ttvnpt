@@ -10,7 +10,7 @@ function AuthProvider({ children }) {
     });
     const [loading, setLoading] = useState(true);
     useEffect(() => {
-        const unsubcribed = firebaseAuth.onAuthStateChanged(
+        const unsubscribe = firebaseAuth.onAuthStateChanged(
             firebaseAuth.getAuth(),
             (user) => {
                 if (user) {
@@ -30,7 +30,7 @@ function AuthProvider({ children }) {
                 }
             }
         );
-        return () => unsubcribed;
+        return () => unsubscribe;
     }, []);
     return (
         <AuthContext.Provider value={{ auth, setAuth, loading, setLoading }}>

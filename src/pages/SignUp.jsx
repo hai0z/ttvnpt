@@ -4,11 +4,12 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { firebaseAuth } from "../firebase/index";
 
-function SignUp() {
+const SignUp = () => {
     const [signupSuccess, setSignupSuccess] = useState({
         status: "",
         message: "",
     });
+
     const formik = useFormik({
         initialValues: {
             email: "",
@@ -52,12 +53,13 @@ function SignUp() {
                 ),
         }),
     });
+
     return (
         <section className="h-screen">
             <div className="px-6 h-full text-gray-800">
                 <div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">
                     <div className="grow-0 shrink-1 md:shrink-0 basis-auto xl:w-6/12 lg:w-6/12 md:w-9/12 mb-12 md:mb-0">
-                        <img
+                        <image
                             src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
                             className="w-full"
                             alt="Sample image"
@@ -228,6 +230,6 @@ function SignUp() {
             </div>
         </section>
     );
-}
+};
 
 export default SignUp;
