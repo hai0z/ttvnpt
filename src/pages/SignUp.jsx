@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { firebaseAuth } from "../firebase/";
+import { firebaseAuth, db } from "../firebase/";
+import { getAdditionalUserInfo } from "firebase/auth";
 
 const SignUp = () => {
     const [signupSuccess, setSignupSuccess] = useState({
@@ -17,13 +18,22 @@ const SignUp = () => {
             password: "",
             confirmPassword: "",
         },
-        onSubmit: async ({ email, password }) => {
+        onSubmit: async ({ email, password, userName }) => {
             try {
-                await firebaseAuth.createUserWithEmailAndPassword(
+                const user = await firebaseAuth.createUserWithEmailAndPassword(
                     firebaseAuth.getAuth(),
                     email,
                     password
                 );
+                console.log(user);
+                if (getAdditionalUserInfo(user).isNewUser) {
+                    await db.addDoc(db.collection(db.getFirestore(), `users`), {
+                        displayName: userName,
+                        email,
+                        photoURL: user.user.photoURL,
+                        uid: user.user.uid,
+                    });
+                }
                 await firebaseAuth.signOut(firebaseAuth.getAuth());
                 setSignupSuccess({
                     status: true,

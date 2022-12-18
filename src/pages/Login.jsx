@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { firebaseAuth } from "../firebase";
+import { firebaseAuth, db } from "../firebase";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-
+import {
+    GoogleAuthProvider,
+    signInWithPopup,
+    getAdditionalUserInfo,
+} from "firebase/auth";
 const Login = () => {
     const [err, setErr] = useState("");
 
@@ -14,11 +18,12 @@ const Login = () => {
         },
         onSubmit: async ({ email, password }) => {
             try {
-                await firebaseAuth.signInWithEmailAndPassword(
+                const user = await firebaseAuth.signInWithEmailAndPassword(
                     firebaseAuth.getAuth(),
                     email,
                     password
                 );
+                console.log(user);
             } catch (err) {
                 console.log(err);
                 setErr("Wrong email or password");
@@ -37,6 +42,25 @@ const Login = () => {
         return () => clearTimeout(clearErr);
     }, [err]);
 
+    const googleLogin = async () => {
+        const provider = new GoogleAuthProvider();
+        try {
+            const user = await signInWithPopup(
+                firebaseAuth.getAuth(),
+                provider
+            );
+            if (getAdditionalUserInfo(user).isNewUser) {
+                await db.addDoc(db.collection(db.getFirestore(), `users`), {
+                    displayName: user.user.displayName,
+                    email: user.user.email,
+                    photoURL: user.user.photoURL,
+                    uid: user.user.uid,
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
     return (
         <section className="h-screen">
             <div className="px-6 h-full text-gray-800">
@@ -59,6 +83,7 @@ const Login = () => {
                                     data-mdb-ripple="true"
                                     data-mdb-ripple-color="light"
                                     className="inline-block p-3 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out mx-1"
+                                    onClick={googleLogin}
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
