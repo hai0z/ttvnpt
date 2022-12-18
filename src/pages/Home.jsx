@@ -6,7 +6,7 @@ function Home() {
     const { auth } = useAuthContext();
 
     return (
-        <div>
+        <div className="min-h-screen bg-gray-800 text-3xl text-white">
             Home Page
             <h3>Wellcome {auth.email}</h3>
             <br />
