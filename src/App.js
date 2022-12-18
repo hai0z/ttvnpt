@@ -5,7 +5,7 @@ import useAuthContext from "./hooks/useAuthContext";
 import Home from "./pages/Home";
 import SignUp from "./pages/SignUp";
 
-function App() {
+const App = () => {
     const { auth } = useAuthContext();
     return (
         <BrowserRouter>
@@ -18,5 +18,5 @@ function App() {
             </Routes>
         </BrowserRouter>
     );
-}
+};
 export default App;
