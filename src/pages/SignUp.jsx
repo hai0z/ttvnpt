@@ -4,9 +4,10 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { firebaseAuth, db } from "../firebase/";
 import { toast } from "react-toastify";
+import useAuthContext from "../hooks/useAuthContext";
 const SignUp = () => {
     const toastId = React.useRef(null);
-
+    const { googleLogin } = useAuthContext();
     const signupHandle = async (email, password, userName) => {
         try {
             const user = await firebaseAuth.createUserWithEmailAndPassword(
@@ -86,6 +87,7 @@ const SignUp = () => {
                                     Sign in with
                                 </p>
                                 <button
+                                    onClick={googleLogin}
                                     type="button"
                                     data-mdb-ripple="true"
                                     data-mdb-ripple-color="light"

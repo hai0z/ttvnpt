@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import { firebaseAuth, db } from "../firebase";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import useAuthContext from "../hooks/useAuthContext";
 
 const Login = () => {
     const [err, setErr] = useState("");
-
+    const { googleLogin } = useAuthContext();
     const formik = useFormik({
         initialValues: {
             email: "",
@@ -39,28 +39,6 @@ const Login = () => {
         return () => clearTimeout(clearErr);
     }, [err]);
 
-    const googleLogin = async () => {
-        const provider = new GoogleAuthProvider();
-        try {
-            const user = await signInWithPopup(
-                firebaseAuth.getAuth(),
-                provider
-            );
-            if (firebaseAuth.getAdditionalUserInfo(user).isNewUser) {
-                await db.setDoc(
-                    db.doc(db.getFirestore(), "user", user.user.uid),
-                    {
-                        displayName: user.user.displayName,
-                        email: user.user.email,
-                        photoURL: user.user.photoURL,
-                        uid: user.user.uid,
-                    }
-                );
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
     return (
         <section className="h-screen">
             <div className="px-6 h-full text-gray-800">

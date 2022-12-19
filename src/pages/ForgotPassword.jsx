@@ -1,18 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { firebaseAuth, db } from "../firebase";
+import { firebaseAuth } from "../firebase";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import {
-    GoogleAuthProvider,
-    sendPasswordResetEmail,
-    signInWithPopup,
-} from "firebase/auth";
+
 import { toast } from "react-toastify";
+import useAuthContext from "../hooks/useAuthContext";
+
 const ForgotPassword = () => {
+    const { googleLogin } = useAuthContext();
     const forgotPassword = async (email) => {
         try {
-            await sendPasswordResetEmail(firebaseAuth.getAuth(), email);
+            await firebaseAuth.sendPasswordResetEmail(
+                firebaseAuth.getAuth(),
+                email
+            );
         } catch (error) {
             throw error;
         }
@@ -37,25 +39,6 @@ const ForgotPassword = () => {
         }),
     });
 
-    const googleLogin = async () => {
-        const provider = new GoogleAuthProvider();
-        try {
-            const user = await signInWithPopup(
-                firebaseAuth.getAuth(),
-                provider
-            );
-            if (firebaseAuth.getAdditionalUserInfo(user).isNewUser) {
-                await db.addDoc(db.collection(db.getFirestore(), "users"), {
-                    displayName: user.user.displayName,
-                    email: user.user.email,
-                    photoURL: user.user.photoURL,
-                    uid: user.user.uid,
-                });
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
     return (
         <section className="h-screen">
             <div className="px-6 h-full text-gray-800">
