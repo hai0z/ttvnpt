@@ -8,6 +8,7 @@ import useAuthContext from "../hooks/useAuthContext";
 const SignUp = () => {
     const toastId = React.useRef(null);
     const { googleLogin } = useAuthContext();
+
     const signupHandle = async (email, password, userName) => {
         try {
             const user = await firebaseAuth.createUserWithEmailAndPassword(
@@ -26,7 +27,6 @@ const SignUp = () => {
                     }
                 );
             }
-            await firebaseAuth.signOut(firebaseAuth.getAuth());
         } catch (error) {
             console.log(error);
             throw error;

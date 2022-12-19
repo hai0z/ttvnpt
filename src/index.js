@@ -6,13 +6,16 @@ import AuthProvider from "./context/AuthProvider";
 import reportWebVitals from "./reportWebVitals";
 import "react-toastify/dist/ReactToastify.css";
 import Toast from "./components/Toast";
+import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
-        <AuthProvider>
-            <App />
-            <Toast />
-        </AuthProvider>
+        <BrowserRouter>
+            <AuthProvider>
+                <App />
+                <Toast />
+            </AuthProvider>
+        </BrowserRouter>
     </React.StrictMode>
 );
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { firebaseAuth, db } from "../firebase";
+import { Link, useNavigate } from "react-router-dom";
+import { firebaseAuth } from "../firebase";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import useAuthContext from "../hooks/useAuthContext";
@@ -8,6 +8,7 @@ import useAuthContext from "../hooks/useAuthContext";
 const Login = () => {
     const [err, setErr] = useState("");
     const { googleLogin } = useAuthContext();
+    const navigate = useNavigate();
     const formik = useFormik({
         initialValues: {
             email: "",
@@ -15,12 +16,12 @@ const Login = () => {
         },
         onSubmit: async ({ email, password }) => {
             try {
-                const user = await firebaseAuth.signInWithEmailAndPassword(
+                await firebaseAuth.signInWithEmailAndPassword(
                     firebaseAuth.getAuth(),
                     email,
                     password
                 );
-                console.log(user);
+                navigate("/");
             } catch (err) {
                 console.log(err);
                 setErr("Wrong email or password");

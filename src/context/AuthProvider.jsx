@@ -1,4 +1,5 @@
 import React, { useEffect, useState, createContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { firebaseAuth, db } from "../firebase/";
 
 export const AuthContext = createContext();
@@ -10,7 +11,7 @@ function AuthProvider({ children }) {
         email: "",
     });
     const [loading, setLoading] = useState(true);
-
+    const navigate = useNavigate();
     const googleLogin = async () => {
         const provider = new firebaseAuth.GoogleAuthProvider();
         try {
@@ -29,6 +30,7 @@ function AuthProvider({ children }) {
                     }
                 );
             }
+            navigate("/");
         } catch (error) {
             console.log(error);
         }
