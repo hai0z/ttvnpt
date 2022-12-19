@@ -1,70 +1,62 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { firebaseAuth, db } from "../firebase";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { firebaseAuth, db } from "../firebase/";
+import {
+    GoogleAuthProvider,
+    sendPasswordResetEmail,
+    signInWithPopup,
+} from "firebase/auth";
 import { toast } from "react-toastify";
+const ForgotPassword = () => {
+    const notify = () => toast("Email was send");
 
-const SignUp = () => {
-    const signupHandle = async (email, password, userName) => {
+    const forgotPassword = async (email) => {
         try {
-            setLoading(true);
-            const user = await firebaseAuth.createUserWithEmailAndPassword(
+            await sendPasswordResetEmail(firebaseAuth.getAuth(), email);
+        } catch (error) {}
+    };
+    const formik = useFormik({
+        initialValues: {
+            email: "",
+        },
+        onSubmit: async ({ email }) => {
+            try {
+                forgotPassword(email);
+                notify();
+            } catch (err) {
+                console.log(err);
+            }
+        },
+        validationSchema: Yup.object({
+            email: Yup.string().email().required(),
+        }),
+    });
+
+    const googleLogin = async () => {
+        const provider = new GoogleAuthProvider();
+        try {
+            const user = await signInWithPopup(
                 firebaseAuth.getAuth(),
-                email,
-                password
+                provider
             );
             if (firebaseAuth.getAdditionalUserInfo(user).isNewUser) {
-                await db.addDoc(db.collection(db.getFirestore(), `users`), {
-                    displayName: userName,
-                    email,
+                await db.addDoc(db.collection(db.getFirestore(), "users"), {
+                    displayName: user.user.displayName,
+                    email: user.user.email,
                     photoURL: user.user.photoURL,
                     uid: user.user.uid,
                 });
             }
-            await firebaseAuth.signOut(firebaseAuth.getAuth());
-            setLoading(false);
         } catch (error) {
             console.log(error);
-            setLoading(false);
-            throw error;
         }
     };
-
-    const [loading, setLoading] = useState(false);
-    const formik = useFormik({
-        initialValues: {
-            email: "",
-            userName: "",
-            password: "",
-            confirmPassword: "",
-        },
-        onSubmit: async ({ email, password, userName }) => {
-            toast.promise(signupHandle(email, password, userName), {
-                success: "Register success 👌",
-                pending: "Registering...",
-                error: "Email already exists 🤯",
-            });
-        },
-        validationSchema: Yup.object({
-            email: Yup.string().email("Email is not valid"),
-            userName: Yup.string().min(6, "username must be min 6 character"),
-            password: Yup.string()
-                .required()
-                .min(6, "Password should be at least 6 characters"),
-            confirmPassword: Yup.string()
-                .required()
-                .oneOf(
-                    [Yup.ref("password"), null],
-                    "Confirm password not same"
-                ),
-        }),
-    });
-
     return (
         <section className="h-screen">
             <div className="px-6 h-full text-gray-800">
-                <div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">
+                <div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full">
                     <div className="grow-0 shrink-1 md:shrink-0 basis-auto xl:w-6/12 lg:w-6/12 md:w-9/12 mb-12 md:mb-0">
                         <img
                             src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
@@ -83,6 +75,7 @@ const SignUp = () => {
                                     data-mdb-ripple="true"
                                     data-mdb-ripple-color="light"
                                     className="inline-block p-3 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out mx-1"
+                                    onClick={googleLogin}
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -143,11 +136,11 @@ const SignUp = () => {
                                 <input
                                     type="text"
                                     className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                                    id="email"
-                                    name="email"
-                                    onChange={formik.handleChange}
+                                    id="exampleFormControlInput2"
                                     placeholder="Email address"
                                     value={formik.values.email}
+                                    name="email"
+                                    onChange={formik.handleChange}
                                 />
                                 {formik.errors.email && (
                                     <p className="text-red-500">
@@ -155,63 +148,12 @@ const SignUp = () => {
                                     </p>
                                 )}
                             </div>
-                            <div className="mb-6">
-                                <input
-                                    type="text"
-                                    className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                                    id="username"
-                                    name="userName"
-                                    placeholder="Username"
-                                    value={formik.values.userName}
-                                    onChange={formik.handleChange}
-                                />
-                                {formik.errors.userName && (
-                                    <p className="text-red-500">
-                                        {formik.errors.userName}
-                                    </p>
-                                )}
-                            </div>
-
-                            <div className="mb-6">
-                                <input
-                                    type="password"
-                                    className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                                    id="password"
-                                    name="password"
-                                    placeholder="Password"
-                                    value={formik.values.password}
-                                    onChange={formik.handleChange}
-                                />
-                                {formik.errors.password && (
-                                    <p className="text-red-500">
-                                        {formik.errors.password}
-                                    </p>
-                                )}
-                            </div>
-                            <div className="mb-6">
-                                <input
-                                    type="password"
-                                    className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                                    id="confirmpassword"
-                                    placeholder="Confirm password"
-                                    name="confirmPassword"
-                                    value={formik.values.confirmPassword}
-                                    onChange={formik.handleChange}
-                                />
-                                {formik.errors.confirmPassword && (
-                                    <p className="text-red-500">
-                                        {formik.errors.confirmPassword}
-                                    </p>
-                                )}
-                            </div>
                             <div className="text-center lg:text-left">
                                 <input
                                     type="submit"
                                     className="inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-                                    value={"Sign Up"}
-                                    disabled={loading}
+                                    value="Send"
                                 />
-
                                 <p className="text-sm font-semibold mt-2 pt-1 mb-0">
                                     Already have an account?
                                     <Link
@@ -231,4 +173,4 @@ const SignUp = () => {
     );
 };
 
-export default SignUp;
+export default ForgotPassword;

@@ -3,11 +3,8 @@ import { Link } from "react-router-dom";
 import { firebaseAuth, db } from "../firebase";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import {
-    GoogleAuthProvider,
-    signInWithPopup,
-    getAdditionalUserInfo,
-} from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+
 const Login = () => {
     const [err, setErr] = useState("");
 
@@ -49,8 +46,8 @@ const Login = () => {
                 firebaseAuth.getAuth(),
                 provider
             );
-            if (getAdditionalUserInfo(user).isNewUser) {
-                await db.addDoc(db.collection(db.getFirestore(), `users`), {
+            if (firebaseAuth.getAdditionalUserInfo(user).isNewUser) {
+                await db.addDoc(db.collection(db.getFirestore(), "users"), {
                     displayName: user.user.displayName,
                     email: user.user.email,
                     photoURL: user.user.photoURL,
@@ -192,9 +189,12 @@ const Login = () => {
                                         Remember me
                                     </label>
                                 </div>
-                                <a href="#!" className="text-gray-800">
+                                <Link
+                                    to="/forgot-password"
+                                    className="text-gray-800"
+                                >
                                     Forgot password?
-                                </a>
+                                </Link>
                             </div>
                             <div className="text-center lg:text-left">
                                 <input
