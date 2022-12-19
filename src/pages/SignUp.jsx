@@ -18,7 +18,7 @@ const SignUp = () => {
                 await db.setDoc(
                     db.doc(db.getFirestore(), "user", user.user.uid),
                     {
-                        displayName: user.user.displayName,
+                        displayName: userName,
                         email: user.user.email,
                         photoURL: user.user.photoURL,
                         uid: user.user.uid,
