@@ -10,12 +10,12 @@ import {
 } from "firebase/auth";
 import { toast } from "react-toastify";
 const ForgotPassword = () => {
-    const notify = () => toast("Email was send");
-
     const forgotPassword = async (email) => {
         try {
             await sendPasswordResetEmail(firebaseAuth.getAuth(), email);
-        } catch (error) {}
+        } catch (error) {
+            throw error;
+        }
     };
     const formik = useFormik({
         initialValues: {
@@ -23,10 +23,14 @@ const ForgotPassword = () => {
         },
         onSubmit: async ({ email }) => {
             try {
+                toast.promise(forgotPassword, {
+                    success: "Email was send",
+                    error: "Email not found",
+                    pending: "Sending...",
+                });
                 forgotPassword(email);
-                notify();
             } catch (err) {
-                console.log(err);
+                throw err;
             }
         },
         validationSchema: Yup.object({
