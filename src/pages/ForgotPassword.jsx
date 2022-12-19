@@ -23,12 +23,11 @@ const ForgotPassword = () => {
         },
         onSubmit: async ({ email }) => {
             try {
-                toast.promise(forgotPassword, {
+                toast.promise(forgotPassword(email), {
                     success: "Email was send",
                     error: "Email not found",
                     pending: "Sending...",
                 });
-                forgotPassword(email);
             } catch (err) {
                 throw err;
             }
