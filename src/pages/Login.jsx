@@ -47,12 +47,15 @@ const Login = () => {
                 provider
             );
             if (firebaseAuth.getAdditionalUserInfo(user).isNewUser) {
-                await db.addDoc(db.collection(db.getFirestore(), "users"), {
-                    displayName: user.user.displayName,
-                    email: user.user.email,
-                    photoURL: user.user.photoURL,
-                    uid: user.user.uid,
-                });
+                await db.setDoc(
+                    db.doc(db.getFirestore(), "user", user.user.uid),
+                    {
+                        displayName: user.user.displayName,
+                        email: user.user.email,
+                        photoURL: user.user.photoURL,
+                        uid: user.user.uid,
+                    }
+                );
             }
         } catch (error) {
             console.log(error);

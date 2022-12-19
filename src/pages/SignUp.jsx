@@ -4,7 +4,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { firebaseAuth, db } from "../firebase/";
 import { toast } from "react-toastify";
-
 const SignUp = () => {
     const toastId = React.useRef(null);
 
@@ -16,12 +15,15 @@ const SignUp = () => {
                 password
             );
             if (firebaseAuth.getAdditionalUserInfo(user).isNewUser) {
-                await db.addDoc(db.collection(db.getFirestore(), `users`), {
-                    displayName: userName,
-                    email,
-                    photoURL: user.user.photoURL,
-                    uid: user.user.uid,
-                });
+                await db.setDoc(
+                    db.doc(db.getFirestore(), "user", user.user.uid),
+                    {
+                        displayName: user.user.displayName,
+                        email: user.user.email,
+                        photoURL: user.user.photoURL,
+                        uid: user.user.uid,
+                    }
+                );
             }
             await firebaseAuth.signOut(firebaseAuth.getAuth());
         } catch (error) {
