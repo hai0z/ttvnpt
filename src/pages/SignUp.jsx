@@ -6,9 +6,10 @@ import { firebaseAuth, db } from "../firebase/";
 import { toast } from "react-toastify";
 
 const SignUp = () => {
+    const toastId = React.useRef(null);
+
     const signupHandle = async (email, password, userName) => {
         try {
-            setLoading(true);
             const user = await firebaseAuth.createUserWithEmailAndPassword(
                 firebaseAuth.getAuth(),
                 email,
@@ -23,15 +24,12 @@ const SignUp = () => {
                 });
             }
             await firebaseAuth.signOut(firebaseAuth.getAuth());
-            setLoading(false);
         } catch (error) {
             console.log(error);
-            setLoading(false);
             throw error;
         }
     };
 
-    const [loading, setLoading] = useState(false);
     const formik = useFormik({
         initialValues: {
             email: "",
@@ -40,11 +38,18 @@ const SignUp = () => {
             confirmPassword: "",
         },
         onSubmit: async ({ email, password, userName }) => {
-            toast.promise(signupHandle(email, password, userName), {
-                success: "Register success 👌",
-                pending: "Registering...",
-                error: "Email already exists 🤯",
-            });
+            if (!toast.isActive(toastId.current))
+                toastId.current = toast.promise(
+                    signupHandle(email, password, userName),
+                    {
+                        success: "Register success 👌",
+                        pending: "Registering...",
+                        error: "Email already exists 🤯",
+                    },
+                    {
+                        toastId,
+                    }
+                );
         },
         validationSchema: Yup.object({
             email: Yup.string().email("Email is not valid"),
@@ -209,7 +214,6 @@ const SignUp = () => {
                                     type="submit"
                                     className="inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
                                     value={"Sign Up"}
-                                    disabled={loading}
                                 />
 
                                 <p className="text-sm font-semibold mt-2 pt-1 mb-0">
