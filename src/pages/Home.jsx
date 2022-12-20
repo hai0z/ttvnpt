@@ -204,9 +204,14 @@ function Home() {
                             onClick={openModal}
                             className="w-10/12 relative flex justify-center h-16 outline-none bg-stone-50 rounded-lg mt-6 pl-4 items-center cursor-pointer hover:bg-stone-100"
                         >
-                            <span className="mr-auto ml-2 text-xl text-gray-400">
+                            <motion.span
+                                className="mr-auto ml-2 text-xl text-gray-400"
+                                initial={{ marginLeft: 150 }}
+                                animate={{ marginLeft: 8 }}
+                                transition={{ delay: 0.6, duration: 0.6 }}
+                            >
                                 What is your next task?
-                            </span>
+                            </motion.span>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
