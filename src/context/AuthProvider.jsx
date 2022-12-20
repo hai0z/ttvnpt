@@ -7,9 +7,8 @@ export const AuthContext = createContext();
 function AuthProvider({ children }) {
     const [auth, setAuth] = useState({
         isLogin: false,
-        userUid: "",
-        email: "",
     });
+    const [user, setUser] = useState({});
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const googleLogin = async () => {
@@ -33,8 +32,24 @@ function AuthProvider({ children }) {
             navigate("/");
         } catch (error) {
             console.log(error);
+            throw error;
         }
     };
+    const getUserInfo = async () => {
+        try {
+            console.log(firebaseAuth.getAuth().currentUser.uid);
+            const docRef = db.doc(
+                db.getFirestore(),
+                "user",
+                firebaseAuth.getAuth().currentUser.uid
+            );
+            const docSnap = await db.getDoc(docRef);
+            setUser(docSnap.data());
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     useEffect(() => {
         const unsubscribe = firebaseAuth.onAuthStateChanged(
             firebaseAuth.getAuth(),
@@ -42,16 +57,14 @@ function AuthProvider({ children }) {
                 if (user) {
                     setAuth({
                         isLogin: true,
-                        userUid: user.uid,
-                        email: user.email,
                     });
+                    getUserInfo();
                     setLoading(false);
                 } else {
                     setAuth({
                         isLogin: false,
-                        userUid: "",
-                        email: "",
                     });
+                    setUser({});
                     setLoading(false);
                 }
             }
@@ -61,7 +74,14 @@ function AuthProvider({ children }) {
 
     return (
         <AuthContext.Provider
-            value={{ auth, setAuth, loading, setLoading, googleLogin }}
+            value={{
+                auth,
+                setAuth,
+                loading,
+                setLoading,
+                googleLogin,
+                user,
+            }}
         >
             {!loading && children}
         </AuthContext.Provider>

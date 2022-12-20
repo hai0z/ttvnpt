@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -22,7 +22,9 @@ const SignUp = () => {
                     {
                         displayName: userName,
                         email: user.user.email,
-                        photoURL: user.user.photoURL,
+                        photoURL:
+                            user.user.photoURL ??
+                            "https://i.stack.imgur.com/34AD2.jpg",
                         uid: user.user.uid,
                     }
                 );

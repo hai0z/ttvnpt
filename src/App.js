@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import useAuthContext from "./hooks/useAuthContext";
 import Home from "./pages/Home";
@@ -7,10 +7,10 @@ import SignUp from "./pages/SignUp";
 import ForgotPassword from "./pages/ForgotPassword";
 
 const RequireAuth = ({ user, children }) => {
-    console.log(user);
     if (user?.islogin === false) {
         return <Navigate to="/login" replace />;
-    } else return children;
+    }
+    return children;
 };
 const App = () => {
     const { auth } = useAuthContext();
