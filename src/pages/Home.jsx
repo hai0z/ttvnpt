@@ -22,6 +22,36 @@ function Home() {
         setModalVisible(false);
     }, []);
 
+    const onDelete = useCallback(
+        (id) => {
+            const deleteTodo = async () => {
+                try {
+                    await db.updateDoc(
+                        db.doc(
+                            db.getFirestore(),
+                            "todos",
+                            firebaseAuth.getAuth().currentUser.uid
+                        ),
+                        {
+                            todo: [...todoList].filter(
+                                (todo) => todo.id !== id
+                            ),
+                        }
+                    );
+                } catch (error) {
+                    console.log(error);
+                    throw error;
+                }
+            };
+            toast.promise(deleteTodo, {
+                success: "Delete task success",
+                pending: "Ading task ....",
+                error: "Add error",
+            });
+        },
+        [todoList]
+    );
+
     const onSubmit = useCallback(
         async (todo) => {
             const addToto = async () => {
@@ -157,7 +187,11 @@ function Home() {
                         <div className="h-auto w-full mt-6 flex flex-row justify-center items-center flex-wrap">
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                                 {todoList?.map((todo, index) => (
-                                    <TodoCard key={index} todo={todo} />
+                                    <TodoCard
+                                        key={index}
+                                        todo={todo}
+                                        onDelete={onDelete}
+                                    />
                                 ))}
                             </div>
                         </div>
