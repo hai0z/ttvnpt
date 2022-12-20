@@ -5,6 +5,8 @@ import AddTaskModal from "../components/modal/AddTaskModal";
 import TodoCard from "../components/todoList/TodoCard";
 import { toast } from "react-toastify";
 import SideBar from "../components/Home/SideBar";
+import { motion } from "framer-motion";
+
 function Home() {
     const today = new Date().toISOString().slice(0, 10);
 
@@ -146,19 +148,34 @@ function Home() {
         });
     };
     return (
-        <div className="min-h-screen bg-[#a18aff] flex flex-row p-3 relative font-mono">
+        <div className="min-h-screen flex flex-row relative font-mono">
             {user && (
                 <>
                     <SideBar />
-                    <div className="w-9/12 min-h-screen bg-[#ba8cfe] bg-opacity-95 relative flex flex-col items-center rounded-br-md rounded-tr-md ">
-                        <div className="absolute z-10 top-10 right-28">
+                    <motion.div
+                        className="w-9/12 min-h-screen bg-[#a18aff] bg-opacity-95 relative flex flex-col items-center rounded-br-md rounded-tr-md "
+                        initial={{ x: 600 }}
+                        animate={{ x: 0 }}
+                        exit={{ x: 600 }}
+                    >
+                        <motion.div
+                            className="absolute z-10 top-10 right-28"
+                            initial={{ width: 0 }}
+                            animate={{ width: 256 }}
+                            transition={{ delay: 0.2, duration: 0.5 }}
+                            exit={{ width: 0 }}
+                        >
                             <input
                                 type="text"
                                 placeholder="Enter task title..."
-                                className="h-8 w-64 rounded-md outline-none ring-0 focus:ring-2 pl-3 ring-pink-400 hover:ring-2"
+                                className="h-8 w-full rounded-md outline-none ring-0 focus:ring-2 pl-3 ring-pink-400 hover:ring-2"
                                 onChange={(e) => searchTodo(e.target.value)}
                             />
-                            <svg
+                            <motion.svg
+                                initial={{ opacity: 0, right: 8 }}
+                                animate={{ opacity: 1, right: 0 }}
+                                transition={{ delay: 1.2, duration: 0.5 }}
+                                exit={{ opacity: 0, right: 8 }}
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
@@ -171,11 +188,16 @@ function Home() {
                                     strokeLinejoin="round"
                                     d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
                                 />
-                            </svg>
-                        </div>
-                        <span className="font-bold text-white text-5xl text-left mr-auto pl-24 pt-10">
+                            </motion.svg>
+                        </motion.div>
+                        <motion.span
+                            className="font-bold text-white text-5xl text-left mr-auto pl-24 pt-10"
+                            initial={{ opacity: 0, translateY: 40 }}
+                            animate={{ opacity: 1, translateY: 0 }}
+                            transition={{ delay: 0.6 }}
+                        >
                             Today Task
-                        </span>
+                        </motion.span>
 
                         <div
                             onClick={openModal}
@@ -205,7 +227,7 @@ function Home() {
                                     Không có dữ liệu
                                 </p>
                             )}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                            <motion.div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                                 {todoList
                                     ?.filter((todo) => todo.date === today)
                                     .map((todo, index) => (
@@ -213,11 +235,12 @@ function Home() {
                                             key={index}
                                             todo={todo}
                                             onDelete={onDelete}
+                                            index={index}
                                         />
                                     ))}
-                            </div>
+                            </motion.div>
                         </div>
-                    </div>
+                    </motion.div>
                 </>
             )}
             <AddTaskModal

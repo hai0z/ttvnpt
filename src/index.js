@@ -7,12 +7,15 @@ import reportWebVitals from "./reportWebVitals";
 import "react-toastify/dist/ReactToastify.css";
 import Toast from "./components/Toast";
 import { BrowserRouter } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
         <BrowserRouter>
             <AuthProvider>
-                <App />
+                <AnimatePresence>
+                    <App />
+                </AnimatePresence>
                 <Toast />
             </AuthProvider>
         </BrowserRouter>

@@ -1,10 +1,17 @@
 import React from "react";
+import { motion } from "framer-motion";
 
-function TodoCard({ todo, onDelete }) {
+function TodoCard({ todo, onDelete, index }) {
     return (
-        <div className="container mt-4 mx-auto w-64">
-            <div className="card mr-2 cursor-pointer border border-stone-100 rounded-lg hover:shadow-md hover:border-opacity-0 transform hover:-translate-y-1 transition-all duration-200 bg-white group drop-shadow-lg">
-                <div className="m-3 font-mono">
+        <motion.div
+            className="container mt-4 mx-auto w-64 "
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ delay: index * 0.2, duration: 0.2 }}
+        >
+            <div className="card mr-4 cursor-pointer border border-stone-100 rounded-lg hover:shadow-md hover:border-opacity-0 transform hover:scale-105 transition-all duration-200 bg-white group shadow-2xl">
+                <div className="m-3 font-mono ">
                     <h2 className="text-lg mb-2 flex justify-between">
                         {todo?.title}
                         <div className="flex">
@@ -45,7 +52,7 @@ function TodoCard({ todo, onDelete }) {
                     <p>{todo?.date}</p>
                 </div>
             </div>
-        </div>
+        </motion.div>
     );
 }
 

@@ -12,7 +12,7 @@ function SideBar() {
     }, [user]);
 
     return (
-        <div className="w-3/12 min-h-screen bg-stone-100 rounded-tl-lg rounded-bl-lg flex flex-col">
+        <div className="w-3/12 min-h-screen bg-stone-100  flex flex-col">
             <div className="flex flex-row p-5">
                 <img
                     src={userInfo?.photoURL}
