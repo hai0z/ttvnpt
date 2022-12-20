@@ -153,16 +153,17 @@ function Home() {
                 <>
                     <SideBar />
                     <motion.div
-                        className="w-9/12 min-h-screen bg-[#a18aff] bg-opacity-95 relative flex flex-col items-center rounded-br-md rounded-tr-md "
-                        initial={{ x: 600 }}
-                        animate={{ x: 0 }}
-                        exit={{ x: 600 }}
+                        className="w-9/12 min-h-screen bg-[#a18aff] bg-opacity-95 relative flex flex-col items-center rounded-br-md rounded-tr-md overflow-x-hidden"
+                        initial={{ width: 0 }}
+                        animate={{ width: "100%" }}
+                        exit={{ width: 0 }}
+                        transition={{ duration: 0.75 }}
                     >
                         <motion.div
                             className="absolute z-10 top-10 right-28"
                             initial={{ width: 0 }}
                             animate={{ width: 256 }}
-                            transition={{ delay: 0.2, duration: 0.5 }}
+                            transition={{ delay: 0.6, duration: 0.5 }}
                             exit={{ width: 0 }}
                         >
                             <input

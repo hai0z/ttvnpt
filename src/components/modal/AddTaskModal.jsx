@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { motion } from "framer-motion";
 function AddTaskModal({ onSubmit, onClose, visible }) {
     const [todo, setTodo] = useState({
         id: "",
@@ -10,7 +10,10 @@ function AddTaskModal({ onSubmit, onClose, visible }) {
     });
     return (
         <dh-component>
-            <div
+            <motion.div
+                initial={{ scaleY: 0 }}
+                animate={{ scaleY: 1 }}
+                exit={{ scaleY: 0 }}
                 className={
                     visible
                         ? `py-16 transition duration-150 ease-in-out z-10 absolute top-0 right-0 bottom-0 left-0 backdrop-blur-sm`
@@ -114,7 +117,7 @@ function AddTaskModal({ onSubmit, onClose, visible }) {
                         </button>
                     </div>
                 </div>
-            </div>
+            </motion.div>
         </dh-component>
     );
 }

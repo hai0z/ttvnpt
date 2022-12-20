@@ -4,7 +4,7 @@ import { firebaseAuth } from "../firebase";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import useAuthContext from "../hooks/useAuthContext";
-
+import { motion } from "framer-motion";
 const Login = () => {
     const [err, setErr] = useState("");
     const { googleLogin } = useAuthContext();
@@ -42,8 +42,14 @@ const Login = () => {
 
     return (
         <section className="h-screen">
-            <div className="px-6 h-full text-gray-800">
-                <div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full">
+            <div className="px-6 h-full text-gray-800 ">
+                <motion.div
+                    className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.75 }}
+                >
                     <div className="grow-0 shrink-1 md:shrink-0 basis-auto xl:w-6/12 lg:w-6/12 md:w-9/12 mb-12 md:mb-0">
                         <img
                             src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
@@ -197,7 +203,7 @@ const Login = () => {
                             </div>
                         </form>
                     </div>
-                </div>
+                </motion.div>
             </div>
         </section>
     );
