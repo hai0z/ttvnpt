@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 
 function AddTaskModal({ onSubmit, onClose, visible }) {
+    const [todo, setTodo] = useState({
+        id: "",
+        title: "",
+        description: "",
+        date: "",
+        isComplete: false,
+    });
     return (
         <dh-component>
             <div
@@ -39,8 +46,11 @@ function AddTaskModal({ onSubmit, onClose, visible }) {
                             Task Titile
                         </label>
                         <input
-                            id="name"
+                            id="title"
                             className="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border"
+                            onChange={(e) =>
+                                setTodo({ ...todo, title: e.target.value })
+                            }
                         />
                         <label className="text-gray-800 text-sm font-bold leading-tight tracking-normal">
                             Task Descriptions
@@ -49,6 +59,12 @@ function AddTaskModal({ onSubmit, onClose, visible }) {
                             <input
                                 id="email2"
                                 className="text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border"
+                                onChange={(e) =>
+                                    setTodo({
+                                        ...todo,
+                                        description: e.target.value,
+                                    })
+                                }
                             />
                         </div>
                         <label className="text-gray-800 text-sm font-bold leading-tight tracking-normal">
@@ -58,11 +74,17 @@ function AddTaskModal({ onSubmit, onClose, visible }) {
                             <input
                                 type="date"
                                 className="text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border p-1"
+                                onChange={(e) =>
+                                    setTodo({ ...todo, date: e.target.value })
+                                }
                             />
                         </div>
 
                         <div className="flex items-center justify-start w-full">
-                            <button className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm">
+                            <button
+                                onClick={() => onSubmit(todo)}
+                                className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm"
+                            >
                                 Submit
                             </button>
                             <button className="focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-gray-400 ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm">

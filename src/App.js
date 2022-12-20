@@ -14,7 +14,6 @@ const RequireAuth = ({ user, children }) => {
 };
 const App = () => {
     const { auth } = useAuthContext();
-    console.log({ auth });
     return (
         <Routes>
             <Route
