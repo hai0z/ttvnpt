@@ -1,21 +1,16 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useCallback, useEffect, useState } from "react";
 import { firebaseAuth, db } from "../firebase";
 import useAuthContext from "../hooks/useAuthContext";
 import AddTaskModal from "../components/modal/AddTaskModal";
 import TodoCard from "../components/todoList/TodoCard";
 import { toast } from "react-toastify";
-
+import SideBar from "../components/Home/SideBar";
 function Home() {
     const today = new Date().toISOString().slice(0, 10);
 
     const { user } = useAuthContext();
     const [modalVisible, setModalVisible] = useState(false);
     const [todoList, setTodoList] = useState([]);
-
-    const userInfo = useMemo(() => {
-        return user;
-    }, [user]);
 
     const openModal = useCallback(() => {
         setModalVisible(true);
@@ -48,10 +43,11 @@ function Home() {
             };
             toast.promise(deleteTodo, {
                 success: "Delete task success",
-                pending: "Ading task ....",
-                error: "Add error",
+                pending: "Deleting task ....",
+                error: "Delete error",
             });
         },
+
         [todoList]
     );
 
@@ -115,8 +111,6 @@ function Home() {
         },
         [todoList]
     );
-    const navigate = useNavigate();
-
     useEffect(() => {
         const docRef = db.doc(
             db.getFirestore(),
@@ -124,10 +118,10 @@ function Home() {
             firebaseAuth.getAuth().currentUser.uid
         );
         const unsub = db.onSnapshot(docRef, (doc) => {
-            setTodoList(doc.data()?.todo);
+            setTodoList(doc.data()?.todo ?? []);
         });
         return () => unsub();
-    }, []);
+    }, [today]);
 
     const searchTodo = (searchInput) => {
         const docRef = db.doc(
@@ -152,57 +146,10 @@ function Home() {
         });
     };
     return (
-        <div className="min-h-screen bg-[#a18aff] flex flex-row p-3 relative">
+        <div className="min-h-screen bg-[#a18aff] flex flex-row p-3 relative font-mono">
             {user && (
                 <>
-                    <div className="w-3/12 min-h-screen bg-stone-100 rounded-tl-lg rounded-bl-lg flex flex-col">
-                        <div className="flex flex-row p-5">
-                            <img
-                                src={userInfo?.photoURL}
-                                alt="user-avatar"
-                                className="rounded-full w-12 h-12"
-                            />
-                            <div className="flex flex-col ml-3 justify-center">
-                                <span className="text-gray-600 text-[14px] font-medium block">
-                                    Do - it
-                                </span>
-                                <span className="text-[#a18aff] text-[18px] font-medium">
-                                    {userInfo?.displayName}
-                                </span>
-                            </div>
-                        </div>
-
-                        <div className="bg-[#a18aff] w-9/12  h-0.5  mt-4 mx-auto rounded-md" />
-                        <div className="w-full  text-gray-600 mb-3 mt-16 flex items-center ml-6 cursor-pointer">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth="1.5"
-                                stroke="currentColor"
-                                className="w-8 h-8 text-[#ca8bfe]"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M6 6.878V6a2.25 2.25 0 012.25-2.25h7.5A2.25 2.25 0 0118 6v.878m-12 0c.235-.083.487-.128.75-.128h10.5c.263 0 .515.045.75.128m-12 0A2.25 2.25 0 004.5 9v.878m13.5-3A2.25 2.25 0 0119.5 9v.878m0 0a2.246 2.246 0 00-.75-.128H5.25c-.263 0-.515.045-.75.128m15 0A2.25 2.25 0 0121 12v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6c0-.98.626-1.813 1.5-2.122"
-                                />
-                            </svg>
-                            <span className="font-medium ml-4 hover:text-purple-600">
-                                Today task
-                            </span>
-                        </div>
-                        <button
-                            onClick={async () => {
-                                await firebaseAuth.signOut(
-                                    firebaseAuth.getAuth()
-                                );
-                                navigate("/login");
-                            }}
-                        >
-                            logout
-                        </button>
-                    </div>
+                    <SideBar />
                     <div className="w-9/12 min-h-screen bg-[#ba8cfe] bg-opacity-95 relative flex flex-col items-center rounded-br-md rounded-tr-md ">
                         <div className="absolute z-10 top-10 right-28">
                             <input
@@ -253,14 +200,21 @@ function Home() {
                             </svg>
                         </div>
                         <div className="h-auto w-full mt-6 flex flex-row justify-center items-center flex-wrap">
+                            {todoList.length <= 0 && (
+                                <p className="text-2xl font-medium mx-auto mt-12 text-white">
+                                    Không có dữ liệu
+                                </p>
+                            )}
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                                {todoList?.map((todo, index) => (
-                                    <TodoCard
-                                        key={index}
-                                        todo={todo}
-                                        onDelete={onDelete}
-                                    />
-                                ))}
+                                {todoList
+                                    ?.filter((todo) => todo.date === today)
+                                    .map((todo, index) => (
+                                        <TodoCard
+                                            key={index}
+                                            todo={todo}
+                                            onDelete={onDelete}
+                                        />
+                                    ))}
                             </div>
                         </div>
                     </div>

@@ -5,6 +5,7 @@ import useAuthContext from "./hooks/useAuthContext";
 import Home from "./pages/Home";
 import SignUp from "./pages/SignUp";
 import ForgotPassword from "./pages/ForgotPassword";
+import ScheduleTask from "./components/Home/ScheduleTask";
 
 const RequireAuth = ({ user, children }) => {
     if (!user) {
@@ -21,6 +22,14 @@ const App = () => {
                 element={
                     <RequireAuth user={auth.isLogin}>
                         <Home />
+                    </RequireAuth>
+                }
+            ></Route>
+            <Route
+                path="/schedule"
+                element={
+                    <RequireAuth user={auth.isLogin}>
+                        <ScheduleTask />
                     </RequireAuth>
                 }
             />
