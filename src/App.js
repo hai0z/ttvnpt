@@ -7,19 +7,20 @@ import SignUp from "./pages/SignUp";
 import ForgotPassword from "./pages/ForgotPassword";
 
 const RequireAuth = ({ user, children }) => {
-    if (user?.islogin === false) {
+    if (!user) {
         return <Navigate to="/login" replace />;
     }
     return children;
 };
 const App = () => {
     const { auth } = useAuthContext();
+    console.log({ auth });
     return (
         <Routes>
             <Route
                 path="/"
                 element={
-                    <RequireAuth islogin={auth}>
+                    <RequireAuth user={auth.isLogin}>
                         <Home />
                     </RequireAuth>
                 }
