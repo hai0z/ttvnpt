@@ -163,7 +163,7 @@ function Home() {
                 >
                     Today Task
                 </motion.span>
-                <motion.div className="relative h-8 w-64 flex justify-center items-center mt-2 ml-auto mr-10 xl:mr-28">
+                <motion.div className="relative h-8 w-64 flex justify-center items-center mt-2 ml-auto mr-10 xl:mr-28 lg:mr-24 md:mr-20 sm:mr-16">
                     <motion.input
                         type="text"
                         placeholder={
