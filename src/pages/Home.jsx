@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { firebaseAuth, db } from "../firebase";
-import useAuthContext from "../hooks/useAuthContext";
 import AddTaskModal from "../components/modal/AddTaskModal";
 import TodoCard from "../components/todoList/TodoCard";
 import { toast } from "react-toastify";
@@ -10,10 +9,10 @@ import { motion } from "framer-motion";
 function Home() {
     const today = new Date().toISOString().slice(0, 10);
 
-    const { user } = useAuthContext();
     const [modalVisible, setModalVisible] = useState(false);
     const [todoList, setTodoList] = useState([]);
-
+    const [showSearchInput, setShowSearchInput] = useState(false);
+    const [searchValue, setSearchValue] = useState("");
     const openModal = useCallback(() => {
         setModalVisible(true);
     }, []);
@@ -52,7 +51,6 @@ function Home() {
 
         [todoList]
     );
-
     const onSubmit = useCallback(
         async (todo) => {
             const addToto = async () => {
@@ -157,20 +155,35 @@ function Home() {
                 exit={{ width: 0 }}
                 transition={{ duration: 0.75 }}
             >
-                <motion.div
-                    className="absolute z-10 top-10 right-28 hidden"
-                    initial={{ width: 0 }}
-                    animate={{ width: 256 }}
-                    transition={{ delay: 0.6, duration: 0.5 }}
-                    exit={{ width: 0 }}
+                <motion.span
+                    className="font-bold text-white text-5xl md:text-left md:mr-auto md:pl-24 pt-10 text-center"
+                    initial={{ opacity: 0, translateY: 40 }}
+                    animate={{ opacity: 1, translateY: 0 }}
+                    transition={{ delay: 0.6 }}
                 >
-                    <input
+                    Today Task
+                </motion.span>
+                <motion.div className="relative h-8 w-64 flex justify-center items-center mt-2 ml-auto mr-10 xl:mr-28">
+                    <motion.input
                         type="text"
-                        placeholder="Enter task title..."
-                        className="h-8 w-full rounded-md outline-none ring-0 focus:ring-2 pl-3 ring-pink-400 hover:ring-2"
-                        onChange={(e) => searchTodo(e.target.value)}
+                        placeholder={
+                            showSearchInput ? "Enter task title..." : ""
+                        }
+                        className={
+                            showSearchInput
+                                ? "w-64 rounded-md outline-none -right-0 focus:ring-2 pl-3 ring-pink-400 hover:ring-2 absolute transition-all duration-1000"
+                                : "w-6 absolute transition-all duration-1000 pl-3 -right-0 rounded-full bg-inherit text-[#a18aff]"
+                        }
+                        onChange={(e) => {
+                            setSearchValue(e.target.value);
+                            searchTodo(e.target.value);
+                        }}
                     />
                     <motion.svg
+                        onClick={() => {
+                            setShowSearchInput(!showSearchInput);
+                            setSearchValue("");
+                        }}
                         initial={{ opacity: 0, right: 8 }}
                         animate={{ opacity: 1, right: 0 }}
                         transition={{ delay: 1.2, duration: 0.5 }}
@@ -180,7 +193,7 @@ function Home() {
                         viewBox="0 0 24 24"
                         strokeWidth="1.5"
                         stroke="currentColor"
-                        className="w-6 h-6 absolute top-1 right-0 cursor-pointer"
+                        className="w-6 h-6 cursor-pointer absolute hover:bg-slate-200 rounded-full"
                     >
                         <path
                             strokeLinecap="round"
@@ -189,15 +202,6 @@ function Home() {
                         />
                     </motion.svg>
                 </motion.div>
-                <motion.span
-                    className="font-bold text-white text-5xl md:text-left md:mr-auto md:pl-24 pt-10 text-center"
-                    initial={{ opacity: 0, translateY: 40 }}
-                    animate={{ opacity: 1, translateY: 0 }}
-                    transition={{ delay: 0.6 }}
-                >
-                    Today Task
-                </motion.span>
-
                 <div
                     onClick={openModal}
                     className="w-10/12 relative flex justify-center h-16 outline-none bg-stone-50 rounded-lg mt-6 pl-4 items-center cursor-pointer hover:bg-stone-100"

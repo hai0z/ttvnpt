@@ -94,14 +94,14 @@ function SideBar() {
                     )}
                 </svg>
 
-                <div className="md:flex md:flex-row md:p-5 flex flex-col justify-center items-center py-4">
+                <div className="lg:flex lg:flex-row lg:p-5 flex flex-col justify-center items-center py-4">
                     <img
                         src={user?.photoURL}
                         alt="user-avatar"
                         className="rounded-full w-12 h-12"
                     />
-                    <div className="md:flex md:flex-col md:ml-3 md:justify-center">
-                        <span className="text-gray-600 text-[14px] font-medium hidden md:block">
+                    <div className="lg:flex lg:flex-col lg:ml-3 lg:justify-center mt-1">
+                        <span className="text-gray-600 lg:text-[14px] text-sm font-medium hidden lg:block">
                             Do - it
                         </span>
                         <span className="text-[#a18aff] text-[18px] font-medium">
@@ -113,7 +113,7 @@ function SideBar() {
                 <div className="bg-[#a18aff] w-9/12  h-0.5  mt-4 mx-auto rounded-md" />
                 <div
                     onClick={() => navigate("/")}
-                    className="w-full  text-gray-600 mb-3 mt-16 flex items-center ml-6 cursor-pointer"
+                    className="w-full  text-gray-600 mb-3 mt-16 flex items-center lg:ml-6 cursor-pointer ml-3"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -133,13 +133,13 @@ function SideBar() {
                             d="M6 6.878V6a2.25 2.25 0 012.25-2.25h7.5A2.25 2.25 0 0118 6v.878m-12 0c.235-.083.487-.128.75-.128h10.5c.263 0 .515.045.75.128m-12 0A2.25 2.25 0 004.5 9v.878m13.5-3A2.25 2.25 0 0119.5 9v.878m0 0a2.246 2.246 0 00-.75-.128H5.25c-.263 0-.515.045-.75.128m15 0A2.25 2.25 0 0121 12v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6c0-.98.626-1.813 1.5-2.122"
                         />
                     </svg>
-                    <span className="font-medium ml-4 hover:text-purple-600">
+                    <span className="font-medium lg:ml-4 hover:text-purple-600">
                         Today task
                     </span>
                 </div>
                 <div
                     onClick={() => navigate("/schedule")}
-                    className="w-full hover:text-purple-600 text-gray-600 mb-3 mt-4 flex items-center ml-6 cursor-pointer"
+                    className="w-full hover:text-purple-600 text-gray-600 mb-3 mt-4 flex items-center lg:ml-6 ml-3 cursor-pointer"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -160,7 +160,7 @@ function SideBar() {
                         />
                     </svg>
 
-                    <span className="font-medium ml-4 hover:text-purple-600">
+                    <span className="font-medium lg:ml-4 hover:text-purple-600">
                         Scheduled Task
                     </span>
                 </div>
