@@ -49,9 +49,9 @@ function SideBar() {
             className={
                 isMobile && showMenu
                     ? "w-full min-h-screen absolute z-10 backdrop-brightness-50"
-                    : !showMenu
-                    ? "min-h-screen absolute z-10 w-auto "
-                    : "min-h-screen relative z-10 w-3/12 "
+                    : !showMenu && !isMobile
+                    ? "min-h-screen relative z-10 w-3/12"
+                    : "min-h-screen absolute z-10"
             }
         >
             <div
