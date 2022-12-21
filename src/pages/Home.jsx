@@ -149,7 +149,6 @@ function Home() {
     };
     return (
         <div className="min-h-screen flex flex-row relative font-mono">
-            <div></div>
             <SideBar />
             <motion.div
                 className="w-full min-h-screen bg-[#a18aff] bg-opacity-95 relative flex flex-col items-center overflow-x-hidden"
