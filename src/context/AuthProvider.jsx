@@ -37,7 +37,6 @@ function AuthProvider({ children }) {
     };
     const getUserInfo = async () => {
         try {
-            console.log(firebaseAuth.getAuth().currentUser.uid);
             const docRef = db.doc(
                 db.getFirestore(),
                 "user",

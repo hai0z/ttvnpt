@@ -1,4 +1,4 @@
-import React, { useMemo, memo } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import useAuthContext from "../../hooks/useAuthContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { firebaseAuth } from "../../firebase";
@@ -6,25 +6,97 @@ function SideBar() {
     let location = useLocation();
     const navigate = useNavigate();
     const { user } = useAuthContext();
+    const [showMenu, setShowMenu] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+    const menuRef = useRef();
 
-    const userInfo = useMemo(() => {
-        return user;
-    }, [user]);
+    const [windowSize, setWindowSize] = useState({
+        innerWidth: undefined,
+        innerHeight: undefined,
+    });
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowSize({
+                innerHeight: window.innerHeight,
+                innerWidth: window.innerWidth,
+            });
+        };
+        const handleClickOutSide = (e) => {
+            if (menuRef && !menuRef.current.contains(e.target)) {
+                setShowMenu(false);
+            }
+        };
+        document.addEventListener("click", handleClickOutSide);
+        window.addEventListener("resize", handleResize);
+        handleResize();
 
+        return () => {
+            document.removeEventListener("click", handleClickOutSide);
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
+    useEffect(() => {
+        console.log(windowSize);
+        if (windowSize.innerWidth < 768) {
+            setIsMobile(true);
+        } else {
+            setIsMobile(false);
+        }
+    }, [windowSize]);
+    console.log(isMobile + " ismb");
     return (
-        <div className="w-3/12 min-h-screen bg-stone-100  flex flex-col">
-            <div className="flex flex-row p-5">
+        <div
+            ref={menuRef}
+            className={
+                isMobile && !showMenu
+                    ? "min-h-screen bg-wihte lg:flex lg:flex-col bg-white x-50 transform p-1 drop-shadow-2xl transition-all duration-300 z-50 -translate-x-96 fixed"
+                    : !showMenu
+                    ? "min-h-screen bg-wihte lg:flex lg:flex-col md:w-3/12  bg-white x-50 transform p-1 drop-shadow-2xl transition-all duration-300 relative z-50"
+                    : "min-h-screen bg-wihte lg:flex lg:flex-col md:w-3/12  bg-white x-50 transform p-1 drop-shadow-2xl transition-all duration-300 absolute z-50"
+            }
+        >
+            <svg
+                onClick={() => setShowMenu(!showMenu)}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                className={
+                    !isMobile
+                        ? "hidden"
+                        : showMenu
+                        ? "w-8 h-8 absolute left-[100%] top-0 bg-stone-300 text-black shadow-lg transti duration-700 z-20"
+                        : "w-8 h-8 absolute left-[384px] top-0 bg-stone-300 text-black shadow-lg transti duration-700 z-20"
+                }
+            >
+                {showMenu ? (
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                    />
+                ) : (
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                    />
+                )}
+            </svg>
+
+            <div className="md:flex md:flex-row md:p-5 flex flex-col justify-center items-center py-4">
                 <img
-                    src={userInfo?.photoURL}
+                    src={user?.photoURL}
                     alt="user-avatar"
                     className="rounded-full w-12 h-12"
                 />
-                <div className="flex flex-col ml-3 justify-center">
-                    <span className="text-gray-600 text-[14px] font-medium block">
+                <div className="md:flex md:flex-col md:ml-3 md:justify-center">
+                    <span className="text-gray-600 text-[14px] font-medium hidden md:block">
                         Do - it
                     </span>
                     <span className="text-[#a18aff] text-[18px] font-medium">
-                        {userInfo?.displayName}
+                        {user?.displayName}
                     </span>
                 </div>
             </div>

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 function TodoCard({ todo, onDelete, index }) {
     return (
         <motion.div
-            className="container mt-4 mx-auto w-64 "
+            className="container mt-4 mx-auto w-80 md:w-64"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
