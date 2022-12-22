@@ -12,7 +12,7 @@ function Home() {
     const [modalVisible, setModalVisible] = useState(false);
     const [todoList, setTodoList] = useState([]);
     const [showSearchInput, setShowSearchInput] = useState(false);
-    const [searchValue, setSearchValue] = useState("");
+
     const openModal = useCallback(() => {
         setModalVisible(true);
     }, []);
@@ -149,7 +149,7 @@ function Home() {
         <div className="min-h-screen flex flex-row relative font-mono">
             <SideBar />
             <motion.div
-                className="w-full min-h-screen bg-[#a18aff] bg-opacity-95 relative flex flex-col items-center overflow-x-hidden"
+                className="w-full min-h-screen bg-[#a18aff] bg-opacity-95 relative flex flex-col items-center overflow-x-hidden dark:bg-slate-600"
                 initial={{ width: 0 }}
                 animate={{ width: "100%" }}
                 exit={{ width: 0 }}
@@ -175,14 +175,12 @@ function Home() {
                                 : "w-6 absolute transition-all duration-1000 pl-3 -right-0 rounded-full bg-inherit text-[#a18aff]"
                         }
                         onChange={(e) => {
-                            setSearchValue(e.target.value);
                             searchTodo(e.target.value);
                         }}
                     />
                     <motion.svg
                         onClick={() => {
                             setShowSearchInput(!showSearchInput);
-                            setSearchValue("");
                         }}
                         initial={{ opacity: 0, right: 8 }}
                         animate={{ opacity: 1, right: 0 }}

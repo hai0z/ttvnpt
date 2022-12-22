@@ -59,7 +59,7 @@ function ScheduleTask() {
         <div className="min-h-screen  flex flex-row  relative font-mono">
             <SideBar />
             <motion.div
-                className="w-full h-screen bg-[#ba8cfe] bg-opacity-95 relative flex flex-col items-center rounded-br-md rounded-tr-md overflow-scroll overflow-x-hidden overflow-y-auto overscroll-x-contain"
+                className="w-full h-screen bg-[#ba8cfe] bg-opacity-95 relative flex flex-col items-center rounded-br-md rounded-tr-md overflow-scroll overflow-x-hidden overflow-y-auto overscroll-x-contain dark:bg-slate-600"
                 initial={{
                     scaleY: 0,
                 }}
