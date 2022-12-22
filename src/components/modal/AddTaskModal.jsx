@@ -25,8 +25,8 @@ function AddTaskModal({ onSubmit, onClose, visible }) {
                     role="alert"
                     className="container mx-auto w-11/12 md:w-2/3 max-w-lg"
                 >
-                    <div className="relative py-8 px-5 md:px-10 bg-white shadow-md rounded border border-gray-400">
-                        <div className="w-full flex justify-start text-gray-600 mb-3">
+                    <div className="relative py-8 px-5 md:px-10 bg-white shadow-md rounded border border-gray-400 dark:bg-gray-600 dark:border-none">
+                        <div className="w-full flex justify-start text-gray-600 mb-3 dark:text-white">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -42,10 +42,10 @@ function AddTaskModal({ onSubmit, onClose, visible }) {
                                 />
                             </svg>
                         </div>
-                        <h1 className="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4">
+                        <h1 className="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4 dark:text-white">
                             Enter Task
                         </h1>
-                        <label className="text-gray-800 text-sm font-bold leading-tight tracking-normal">
+                        <label className="text-gray-800 text-sm font-bold leading-tight tracking-normal dark:text-white">
                             Task Titile
                         </label>
                         <input
@@ -55,7 +55,7 @@ function AddTaskModal({ onSubmit, onClose, visible }) {
                                 setTodo({ ...todo, title: e.target.value })
                             }
                         />
-                        <label className="text-gray-800 text-sm font-bold leading-tight tracking-normal">
+                        <label className="text-gray-800 text-sm font-bold leading-tight tracking-normal dark:text-white">
                             Task Descriptions
                         </label>
                         <div className="relative mb-5 mt-2">
@@ -70,7 +70,7 @@ function AddTaskModal({ onSubmit, onClose, visible }) {
                                 }
                             />
                         </div>
-                        <label className="text-gray-800 text-sm font-bold leading-tight tracking-normal">
+                        <label className="text-gray-800 text-sm font-bold leading-tight tracking-normal dark:text-white">
                             Date
                         </label>
                         <div className="relative mb-5 mt-2">
@@ -95,7 +95,7 @@ function AddTaskModal({ onSubmit, onClose, visible }) {
                             </button>
                         </div>
                         <button
-                            className="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600"
+                            className="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600 dark:text-white dark:hover:text-gray-400"
                             onClick={onClose}
                         >
                             <svg
