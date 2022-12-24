@@ -8,6 +8,7 @@ function AddTaskModal({ onSubmit, onClose, visible }) {
         date: "",
         isComplete: false,
     });
+
     return (
         <dh-component>
             <motion.div

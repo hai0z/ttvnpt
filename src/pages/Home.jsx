@@ -5,7 +5,6 @@ import TodoCard from "../components/todoList/TodoCard";
 import { toast } from "react-toastify";
 import SideBar from "../components/Home/SideBar";
 import { motion } from "framer-motion";
-
 function Home() {
     const today = new Date().toISOString().slice(0, 10);
 
@@ -69,7 +68,7 @@ function Home() {
                                     {
                                         title: todo.title,
                                         description: todo.description,
-                                        date: todo.date,
+                                        date: todo.date ?? today,
                                         isComplete: todo.isComplete,
                                         id: Math.floor(Math.random() * 99999),
                                     },
@@ -90,7 +89,7 @@ function Home() {
                                 {
                                     title: todo.title,
                                     description: todo.description,
-                                    date: todo.date,
+                                    date: todo.date ?? today,
                                     isComplete: todo.isComplete,
                                     id: Math.floor(Math.random() * 99999),
                                 },
@@ -109,7 +108,7 @@ function Home() {
             });
             setModalVisible(false);
         },
-        [todoList]
+        [todoList, today]
     );
     useEffect(() => {
         const docRef = db.doc(

@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 function ScheduleTask() {
     const [todoList, setTodoList] = useState([]);
+
     useEffect(() => {
         const docRef = db.doc(
             db.getFirestore(),
@@ -25,6 +26,7 @@ function ScheduleTask() {
 
         return () => unsub();
     }, []);
+
     // const onDelete = useCallback(
     //     (id) => {
     //         const deleteTodo = async () => {
@@ -76,31 +78,29 @@ function ScheduleTask() {
                         </p>
                     )}
                     <div className="flex flex-col items-center justify-center">
-                        {todoList
-                            .sort((a, b) => a - b)
-                            ?.map((todo, index) => {
-                                return (
-                                    <div
-                                        key={index}
-                                        className="md:pl-20 flex justify-center flex-col mb-10"
-                                    >
-                                        <motion.p className="text-3xl text-white font-bold font-mono">
-                                            {todo?.day[0].date}
-                                        </motion.p>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                                            {todo?.day.map((d, index) => {
-                                                return (
-                                                    <TodoCard
-                                                        key={index}
-                                                        todo={d}
-                                                        index={index}
-                                                    />
-                                                );
-                                            })}
-                                        </div>
+                        {todoList?.map((todo, index) => {
+                            return (
+                                <div
+                                    key={index}
+                                    className="md:pl-20 flex justify-center flex-col mb-10"
+                                >
+                                    <motion.p className="text-3xl text-white font-bold font-mono">
+                                        {todo?.day[0].date}
+                                    </motion.p>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                                        {todo?.day.map((d, index) => {
+                                            return (
+                                                <TodoCard
+                                                    key={index}
+                                                    todo={d}
+                                                    index={index}
+                                                />
+                                            );
+                                        })}
                                     </div>
-                                );
-                            })}
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </motion.div>
