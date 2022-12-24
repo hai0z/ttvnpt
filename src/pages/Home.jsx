@@ -227,7 +227,8 @@ function Home() {
                     </svg>
                 </div>
                 <div className="h-auto w-full mt-6 flex flex-row justify-center items-center flex-wrap">
-                    {todoList.length <= 0 && (
+                    {todoList?.filter((todo) => todo.date === today).length <=
+                        0 && (
                         <p className="text-2xl font-medium mx-auto mt-12 text-white">
                             Không có dữ liệu
                         </p>
