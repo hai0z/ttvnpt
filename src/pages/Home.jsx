@@ -51,7 +51,7 @@ function Home() {
         [todoList]
     );
     const onSubmit = useCallback(
-        async (todo) => {
+        (todo) => {
             const addToto = async () => {
                 try {
                     if (todoList.length <= 0) {
@@ -120,7 +120,7 @@ function Home() {
             setTodoList(doc.data()?.todo ?? []);
         });
         return () => unsub();
-    }, [today]);
+    }, []);
 
     const searchTodo = (searchInput) => {
         const docRef = db.doc(

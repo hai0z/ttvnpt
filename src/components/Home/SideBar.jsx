@@ -24,8 +24,6 @@ function SideBar() {
             } else {
                 setDarkMode(false);
             }
-        } else {
-            setDarkMode(false);
         }
     };
 
