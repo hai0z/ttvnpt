@@ -18,12 +18,8 @@ function SideBar() {
 
     const getCurrentTheme = () => {
         const theme = localStorage.getItem("theme");
-        if (theme) {
-            if (JSON.parse(theme).mode === "dark") {
-                setDarkMode(true);
-            } else {
-                setDarkMode(false);
-            }
+        if (theme && JSON.parse(theme).mode === "dark") {
+            setDarkMode(true);
         }
     };
 

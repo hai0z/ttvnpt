@@ -8,16 +8,19 @@ import "react-toastify/dist/ReactToastify.css";
 import Toast from "./components/Toast";
 import { BrowserRouter } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-
+import { store } from "./redux";
+import { Provider } from "react-redux";
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
         <BrowserRouter>
-            <AuthProvider>
-                <AnimatePresence>
-                    <App />
-                </AnimatePresence>
-                <Toast />
-            </AuthProvider>
+            <Provider store={store}>
+                <AuthProvider>
+                    <AnimatePresence>
+                        <App />
+                    </AnimatePresence>
+                    <Toast />
+                </AuthProvider>
+            </Provider>
         </BrowserRouter>
     </React.StrictMode>
 );

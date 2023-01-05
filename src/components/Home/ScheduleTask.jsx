@@ -16,7 +16,8 @@ function ScheduleTask() {
         const unsub = db.onSnapshot(docRef, (doc) => {
             const date = [
                 ...new Set([...doc.data()?.todo.map((todo) => todo.date)]),
-            ];
+            ].sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
+
             const todo = date.map((d) => {
                 const data = doc.data()?.todo.filter((x) => x.date === d);
                 return { day: data };

@@ -149,16 +149,16 @@ function Home() {
             <SideBar />
             <motion.div
                 className="w-full min-h-screen bg-[#a18aff] bg-opacity-95 relative flex flex-col items-center overflow-x-hidden dark:bg-slate-600"
-                initial={{ width: 0 }}
-                animate={{ width: "100%" }}
-                exit={{ width: 0 }}
+                initial={{ translateX: 600 }}
+                animate={{ translateX: 0 }}
+                exit={{ translateX: 600 }}
                 transition={{ duration: 0.75 }}
             >
                 <motion.span
                     className="font-bold text-white text-5xl md:text-left md:mr-auto md:pl-24 pt-10 text-center"
                     initial={{ opacity: 0, translateY: 40 }}
                     animate={{ opacity: 1, translateY: 0 }}
-                    transition={{ delay: 0.6 }}
+                    transition={{ delay: 0.75 }}
                 >
                     Today Task
                 </motion.span>
